@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="main.js"></script>
+    <title>My Form</title>
+</head>
+<body>
+    <h1>Mobile Bike Shop</h1>
+    <h2>customer info</h2>
+    <form id="userForm">
+        <input type="text" name="firstName" placeholder="First Name">
+        <input type="text" name="lastName" placeholder="Last Name">
+        <input type="tel" name="phoneNumber" placeholder="Phone Number">
+        <input type="email" name="email" placeholder="Email">
+        <input type="text" name="address" placeholder="Address">
+        <input type="text" name="zipCode" placeholder="Zip Code">
+        <button type="button" onclick="checkServiceArea()">Check Service Area</button>
+    </form>
+    <p id="result"></p>
+    <h2>select service</h2>
+    <select>
+        <option value="tuneUp">Tune Up</option>
+        <option value="flatTire">Flat Tire</option>
+        <option value="brakeService">Brake Service</option>
+        <option value="chainReplacement">Chain Replacement</option>
+        <option value="fullService">Full Service</option>
+    </select>
+    <h2>select date and time</h2>
+    <input type="date" name="date">
+    <input type="time" name="time">
+    <h2>additional comments</h2>
+    <textarea name="comments" placeholder="Comments"></textarea>
+    <button type="submit">Submit</button>
+</body>
+</html>
