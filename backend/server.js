@@ -105,6 +105,9 @@ app.post('/schedule', async (req, res) => {
       dateTime: `${date}T${time}:59`, // End time (assuming 1-hour event)
       timeZone: 'America/Chicago',
     },
+    // I removed the attendees because this requires the user to be invited
+    // I should add a requirement the user has paid for service before the schedule is 
+    // officially added to the calendar 
     // attendees: [
     //   { email: 'example@example.com' } // Can modify to include other attendees if necessary
     // ],
