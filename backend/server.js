@@ -7,6 +7,8 @@ const app = express();
 
 app.use(express.json()); // To parse JSON bodies
 
+const calendarId = process.env.GOOGLE_CALENDAR_ID;
+
 console.log('Google API Key:', process.env.GOOGLE_MAP_KEY);
 
 // Serve static files from the 'frontend' directory
@@ -96,7 +98,7 @@ app.post('/schedule', async (req, res) => {
 
   try {
     const response = await calendar.events.insert({
-      calendarId: '316aa9023dfd86ff61f9cbf69e7a9f8977c619e766e4985be60d7258f399ed8c@group.calendar.google.com', 
+      calendarId: calendarId, 
       resource: event,
     });
     res.status(200).json({ message: 'Appointment scheduled successfully', event: response.data });
@@ -121,7 +123,7 @@ app.get('/availableTimes', async (req, res) => {
 
   try {
     const response = await calendar.events.list({
-      calendarId: '316aa9023dfd86ff61f9cbf69e7a9f8977c619e766e4985be60d7258f399ed8c@group.calendar.google.com',
+      calendarId: calendarId,
       timeMin: startOfDay.toISOString(),
       timeMax: endOfDay.toISOString(),
       singleEvents: true,
