@@ -12,7 +12,7 @@
     <form id="userForm">
         <input type="text" name="firstName" placeholder="First Name">
         <input type="text" name="lastName" placeholder="Last Name">
-        <input type="tel" name="phoneNumber" placeholder="Phone Number">
+        <input type="tel" name="phoneNumber" placeholder="Cell Number">
         <input type="email" name="email" placeholder="Email">
         <input type="text" name="address" placeholder="Address">
         <input type="text" name="zipCode" placeholder="Zip Code">
@@ -47,6 +47,7 @@
             <option value="3:00 PM">3:00 PM</option> -->
         </select>
         <!-- <input type="text" name="description" placeholder="Description" required> -->
+         <div class="schedule-error-msg" id="scheduleErrorMsg" style="display: none;">Sorry, no appointments available, please select another day.</div>
         <button type="button" onclick="scheduleAppointment()" style="display: none;">Schedule Appointment</button>
     </form>
     <h2>additional comments</h2>

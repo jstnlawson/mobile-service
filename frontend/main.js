@@ -127,6 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const errorMessage = document.getElementById('error-message');
     const timeSelect = document.getElementById('timeSlots');
     const scheduleButton = document.querySelector('button[onclick="scheduleAppointment()"]');
+    const scheduleErrorMsg = document.getElementById('scheduleErrorMsg');
 
     dateInput.addEventListener('input', async function() {
         const selectedDate = new Date(this.value);
@@ -165,13 +166,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
             timeSelect.innerHTML = '';
 
-            if (data.message) {
+            if (!data.availableTimes.length) {
                 const option = document.createElement('option');
-                option.textContent = data.message;
+                option.textContent = 'No available time slots';
                 option.disabled = true;
                 timeSelect.appendChild(option);
-                timeSelect.style.display = 'block'; // Show the select element with message
-                scheduleButton.style.display = 'none'; // Hide the schedule button
+                //timeSelect.style.display = 'block'; // Show the select element with message
+                //scheduleButton.style.display = 'none'; // Hide the schedule button
+                scheduleErrorMsg.style.display = 'block'; // Show the error message
+                dateInput.style.backgroundColor = 'lightcoral'; // Change background color
             } else {
                 data.availableTimes.forEach(time => {
                     const option = document.createElement('option');
