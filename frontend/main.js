@@ -126,59 +126,61 @@ document.addEventListener('DOMContentLoaded', function() {
     const dateInput = document.getElementById('date');
     const errorMessage = document.getElementById('error-message');
     const timeSelect = document.getElementById('timeSlots');
+    const scheduleButton = document.querySelector('button[onclick="scheduleAppointment()"]');
 
     dateInput.addEventListener('input', async function() {
         const selectedDate = new Date(this.value);
-        const dayOfWeek = selectedDate.getUTCDay(); // Get day of the week (0 = Sunday, 6 = Saturday)
-        const currentDate = new Date(); // Get the current date
+        const dayOfWeek = selectedDate.getUTCDay();
+        const currentDate = new Date();
 
-        // Change background color and show error if it's a weekend
         if (dayOfWeek === 6 || dayOfWeek === 0) {
-            this.style.backgroundColor = 'lightcoral'; // Red for weekends
+            this.style.backgroundColor = 'lightcoral';
             errorMessage.textContent = 'Weekends are not selectable. Please choose a weekday.';
             errorMessage.style.display = 'block';
-            this.value = ''; // Clear the input field
-            timeSelect.innerHTML = ''; // Clear time slots if invalid date
+            this.value = '';
+            timeSelect.innerHTML = '';
+            timeSelect.style.display = 'none';
+            scheduleButton.style.display = 'none';
             return;
         }
 
-        // Check for past dates and display error
         if (selectedDate < currentDate) {
-            this.style.backgroundColor = 'lightcoral'; // Red for past dates
+            this.style.backgroundColor = 'lightcoral';
             errorMessage.textContent = 'Past dates are not selectable. Please choose a future date.';
             errorMessage.style.display = 'block';
-            this.value = ''; // Clear the input field
-            timeSelect.innerHTML = ''; // Clear time slots if invalid date
+            this.value = '';
+            timeSelect.innerHTML = '';
+            timeSelect.style.display = 'none';
+            scheduleButton.style.display = 'none';
             return;
         }
 
-        // Valid date - reset styles and error message
-        this.style.backgroundColor = 'lightgreen'; // Green for valid weekdays
+        this.style.backgroundColor = 'lightgreen';
         errorMessage.textContent = '';
         errorMessage.style.display = 'none';
 
-        // Fetch available time slots for the selected date
         try {
             const response = await fetch(`/availableTimes?date=${this.value}`);
             const data = await response.json();
 
-            // Clear the current options
             timeSelect.innerHTML = '';
 
-            // Populate available time slots
-            data.availableTimes.forEach(time => {
+            if (data.message) {
                 const option = document.createElement('option');
-                option.value = time;
-                option.textContent = time;
-                timeSelect.appendChild(option);
-            });
-
-            // If no available times, display a message
-            if (data.availableTimes.length === 0) {
-                const option = document.createElement('option');
-                option.textContent = 'No available time slots';
+                option.textContent = data.message;
                 option.disabled = true;
                 timeSelect.appendChild(option);
+                timeSelect.style.display = 'block'; // Show the select element with message
+                scheduleButton.style.display = 'none'; // Hide the schedule button
+            } else {
+                data.availableTimes.forEach(time => {
+                    const option = document.createElement('option');
+                    option.value = time;
+                    option.textContent = time;
+                    timeSelect.appendChild(option);
+                });
+                timeSelect.style.display = 'block'; // Show the select element
+                scheduleButton.style.display = 'block'; // Show the schedule button
             }
         } catch (error) {
             console.error('Error fetching available times:', error);
@@ -187,3 +189,4 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+

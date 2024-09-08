@@ -36,18 +36,18 @@
         <input type="date" name="date" id="date" required>
         <div id="error-message" style="color: red; display: none;"></div>
         <!-- <input type="time" name="time" required> -->
-        <select id="timeSlots">
-            <option value="8:00 AM">8:00 AM</option>
+        <select id="timeSlots" style="display: none;">
+            <!-- <option value="8:00 AM">8:00 AM</option>
             <option value="9:00 AM">9:00 AM</option>
             <option value="10:00 AM">10:00 AM</option>
             <option value="11:00 AM">11:00 AM</option>
             <option value="12:00 PM">12:00 PM</option>
             <option value="1:00 PM">1:00 PM</option>
             <option value="2:00 PM">2:00 PM</option>
-            <option value="3:00 PM">3:00 PM</option>
+            <option value="3:00 PM">3:00 PM</option> -->
         </select>
         <!-- <input type="text" name="description" placeholder="Description" required> -->
-        <button type="button" onclick="scheduleAppointment()">Schedule Appointment</button>
+        <button type="button" onclick="scheduleAppointment()" style="display: none;">Schedule Appointment</button>
     </form>
     <h2>additional comments</h2>
     <textarea name="comments" placeholder="Comments"></textarea>
