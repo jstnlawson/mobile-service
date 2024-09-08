@@ -1,24 +1,4 @@
-// function checkServiceArea() {
-//     const form = document.getElementById('userForm');
-//     const userAddress = `${form.address.value}, ${form.zipCode.value}`;
 
-//     const url = `http://localhost:8000/distance?destination=${encodeURIComponent(userAddress)}`;
-
-//     fetch(url)
-//         .then(response => response.json())
-//         .then(data => {
-//             const distanceInMeters = data.rows[0].elements[0].distance.value;
-//             const distanceInMiles = distanceInMeters * 0.000621371;
-//             const maxDistanceMiles = 10;
-
-//             if (distanceInMiles <= maxDistanceMiles) {
-//                 document.getElementById('result').innerText = `You are within our service area! (${distanceInMiles.toFixed(2)} miles)`;
-//             } else {
-//                 document.getElementById('result').innerText = `Sorry, you are outside our service area. (${distanceInMiles.toFixed(2)} miles)`;
-//             }
-//         })
-//         .catch(error => console.error('Error:', error));
-// }
 function checkServiceArea() {
     const form = document.getElementById('userForm');
     const userAddress = `${form.address.value}, ${form.zipCode.value}`;
@@ -47,3 +27,163 @@ function checkServiceArea() {
         .catch(error => console.error('Error:', error));
 }
 
+// function scheduleAppointment() {
+//     const form = document.getElementById('scheduleForm');
+//     const date = form.date.value;
+//     const time = form.time.value;
+//     const description = form.description.value;
+
+//     const appointment = { date, time, description };
+
+//     fetch('http://localhost:8000/schedule', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify(appointment),
+//     })
+//     .then(response => {
+//         if (!response.ok) {
+//             // If the response is not OK, return the status text
+//             throw new Error(`Server error: ${response.statusText}`);
+//         }
+//         return response.json(); // Try to parse JSON only if the response is OK
+//     })
+//     .then(data => {
+//         console.log('Appointment scheduled:', data);
+//         alert('Appointment scheduled successfully!');
+//     })
+//     .catch(error => {
+//         console.error('Error:', error);
+//         alert('An error occurred: ' + error.message);
+//     });
+// }
+// document.addEventListener('DOMContentLoaded', function() {
+// document.getElementById('date').addEventListener('input', function() {
+//     const selectedDate = new Date(this.value);
+//     const dayOfWeek = selectedDate.getUTCDay(); // Get day of the week (0 = Sunday, 6 = Saturday)
+//     const currentDate = new Date(); // Get the current date
+
+//     const dateInput = document.getElementById('date');
+//     const errorMessage = document.getElementById('error-message');
+
+//     // Change background color if it's a weekend
+//     if (dayOfWeek === 6 || dayOfWeek === 0) {
+//         this.style.backgroundColor = 'lightcoral'; // Red for weekends
+
+//         errorMessage.textContent = 'Weekends are not selectable. Please choose a weekday.';
+//             errorMessage.style.display = 'block';
+//             this.value = ''; // Clear the input field
+
+//     } else if (selectedDate < currentDate) {
+//         this.style.backgroundColor = 'lightcoral'; // Red for past dates
+
+//         errorMessage.textContent = 'Past dates are not selectable. Please choose a future date.';
+//             errorMessage.style.display = 'block';
+//             this.value = ''; // Clear the input field
+//     } else {
+//         this.style.backgroundColor = 'lightgreen'; // Green for weekdays
+
+//         errorMessage.textContent = '';
+//             errorMessage.style.display = 'none';
+
+//     }
+// });
+// });
+
+function scheduleAppointment() {
+    const form = document.getElementById('scheduleForm');
+    const date = form.date.value;
+    const time = form.timeSlots.value; // Use the select element for time
+    // const description = form.description.value; // (No description as per your request)
+
+    const appointment = { date, time };
+
+    fetch('http://localhost:8000/schedule', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(appointment),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.statusText}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Appointment scheduled:', data);
+        alert('Appointment scheduled successfully!');
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred: ' + error.message);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const dateInput = document.getElementById('date');
+    const errorMessage = document.getElementById('error-message');
+    const timeSelect = document.getElementById('timeSlots');
+
+    dateInput.addEventListener('input', async function() {
+        const selectedDate = new Date(this.value);
+        const dayOfWeek = selectedDate.getUTCDay(); // Get day of the week (0 = Sunday, 6 = Saturday)
+        const currentDate = new Date(); // Get the current date
+
+        // Change background color and show error if it's a weekend
+        if (dayOfWeek === 6 || dayOfWeek === 0) {
+            this.style.backgroundColor = 'lightcoral'; // Red for weekends
+            errorMessage.textContent = 'Weekends are not selectable. Please choose a weekday.';
+            errorMessage.style.display = 'block';
+            this.value = ''; // Clear the input field
+            timeSelect.innerHTML = ''; // Clear time slots if invalid date
+            return;
+        }
+
+        // Check for past dates and display error
+        if (selectedDate < currentDate) {
+            this.style.backgroundColor = 'lightcoral'; // Red for past dates
+            errorMessage.textContent = 'Past dates are not selectable. Please choose a future date.';
+            errorMessage.style.display = 'block';
+            this.value = ''; // Clear the input field
+            timeSelect.innerHTML = ''; // Clear time slots if invalid date
+            return;
+        }
+
+        // Valid date - reset styles and error message
+        this.style.backgroundColor = 'lightgreen'; // Green for valid weekdays
+        errorMessage.textContent = '';
+        errorMessage.style.display = 'none';
+
+        // Fetch available time slots for the selected date
+        try {
+            const response = await fetch(`/availableTimes?date=${this.value}`);
+            const data = await response.json();
+
+            // Clear the current options
+            timeSelect.innerHTML = '';
+
+            // Populate available time slots
+            data.availableTimes.forEach(time => {
+                const option = document.createElement('option');
+                option.value = time;
+                option.textContent = time;
+                timeSelect.appendChild(option);
+            });
+
+            // If no available times, display a message
+            if (data.availableTimes.length === 0) {
+                const option = document.createElement('option');
+                option.textContent = 'No available time slots';
+                option.disabled = true;
+                timeSelect.appendChild(option);
+            }
+        } catch (error) {
+            console.error('Error fetching available times:', error);
+            errorMessage.textContent = 'Failed to load available time slots. Please try again.';
+            errorMessage.style.display = 'block';
+        }
+    });
+});

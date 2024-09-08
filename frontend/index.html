@@ -16,9 +16,13 @@
         <input type="email" name="email" placeholder="Email">
         <input type="text" name="address" placeholder="Address">
         <input type="text" name="zipCode" placeholder="Zip Code">
-        <button type="button" onclick="checkServiceArea()">Check Service Area</button>
+        <button type="button" onclick="checkServiceArea()">Next</button>
     </form>
     <p id="result"></p>
+    <h2>Preferred Contact Method</h2>
+    <input type="radio" name="contactMethod" value="text">Text
+    <input type="radio" name="contactMethod" value="email">Email
+    <input type="radio" name="contactMethod" value="phone">Phone
     <h2>select service</h2>
     <select>
         <option value="tuneUp">Tune Up</option>
@@ -27,9 +31,24 @@
         <option value="chainReplacement">Chain Replacement</option>
         <option value="fullService">Full Service</option>
     </select>
-    <h2>select date and time</h2>
-    <input type="date" name="date">
-    <input type="time" name="time">
+    <h2>schedule appointment</h2>
+    <form id="scheduleForm">
+        <input type="date" name="date" id="date" required>
+        <div id="error-message" style="color: red; display: none;"></div>
+        <!-- <input type="time" name="time" required> -->
+        <select id="timeSlots">
+            <option value="8:00 AM">8:00 AM</option>
+            <option value="9:00 AM">9:00 AM</option>
+            <option value="10:00 AM">10:00 AM</option>
+            <option value="11:00 AM">11:00 AM</option>
+            <option value="12:00 PM">12:00 PM</option>
+            <option value="1:00 PM">1:00 PM</option>
+            <option value="2:00 PM">2:00 PM</option>
+            <option value="3:00 PM">3:00 PM</option>
+        </select>
+        <!-- <input type="text" name="description" placeholder="Description" required> -->
+        <button type="button" onclick="scheduleAppointment()">Schedule Appointment</button>
+    </form>
     <h2>additional comments</h2>
     <textarea name="comments" placeholder="Comments"></textarea>
     <button type="submit">Submit</button>
